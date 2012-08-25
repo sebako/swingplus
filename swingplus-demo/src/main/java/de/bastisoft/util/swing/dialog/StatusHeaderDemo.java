@@ -16,31 +16,54 @@
 
 package de.bastisoft.util.swing.dialog;
 
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
-import de.bastisoft.util.swing.dialog.OkCancelDialog;
+import de.bastisoft.util.swing.IconCache;
+import de.bastisoft.util.swing.IconCacheException;
 import de.bastisoft.util.swing.header.StatusHeader;
 import de.bastisoft.util.swing.header.StatusMessage;
 import de.bastisoft.util.swing.header.StatusMessage.Severity;
 
-public class StatusHeaderDemo extends OkCancelDialog {
+public class StatusHeaderDemo extends CloseDialog {
 
-    public StatusHeaderDemo() {
-        super(null, "StatusHeader Demo", false);
+    private IconCache icons;
+    
+    public StatusHeaderDemo(Frame parent) {
+        super(parent, "StatusHeader Demo", false);
+        
+        Map<String, String> names = new HashMap<>();
+        names.put("icon", "swingplus.png");
+        icons = new IconCache(packagePath(StatusHeaderDemo.class), names);
+        
         setContent(makeWidgets());
     }
 
+    private static String packagePath(Class<?> clazz) {
+        String slashed = clazz.getPackage().getName().replace('.', '/');
+        return "/" + slashed + "/";
+    }
+    
     private JPanel makeWidgets() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         
-        StatusHeader header = new StatusHeader("StatusHeader Demo", "Demonstrating the status header", 400);
+        StatusHeader header;
+        try {
+            header = new StatusHeader("StatusHeader Demo", "Demonstrating the status header. This is a very long text, too long in fact.", icons.getIcon("icon"), 400);
+        }
+        catch (IconCacheException e) {
+            header = new StatusHeader("StatusHeader Demo", "Demonstrating the status header", 400);
+            e.printStackTrace();
+        }
         header.addMessage(new StatusMessage(0, Severity.WARNING, "Warning"));
         
         GridBagConstraints c = new GridBagConstraints();
@@ -61,15 +84,6 @@ public class StatusHeaderDemo extends OkCancelDialog {
         panel.add(new JSeparator(), c);
         
         return panel;
-    }
-
-    @Override
-    protected boolean ok() {
-        return true;
-    }
-    
-    public static void main(String[] args) {
-        new StatusHeaderDemo().run();
     }
 
 }
