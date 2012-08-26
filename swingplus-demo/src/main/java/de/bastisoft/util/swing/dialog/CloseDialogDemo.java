@@ -33,7 +33,7 @@ import javax.swing.JPanel;
 class CloseDialogDemo extends CloseDialog {
 
     public CloseDialogDemo(Frame owner) {
-        super(owner, "CloseDialog Demo", true);
+        super(owner, "CloseDialog Demo", false);
         setContent(makeWidgets());
     }
 
@@ -65,11 +65,6 @@ class CloseDialogDemo extends CloseDialog {
         outerPanel.add(p);
         
         return outerPanel;
-    }
-    
-    public static void main(String[] args) {
-        new CloseDialogDemo(null).setVisible(true);
-        System.exit(0);
     }
     
 }

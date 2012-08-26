@@ -19,14 +19,20 @@ package de.bastisoft.util.swing.header;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,6 +55,7 @@ public class StatusHeader extends JPanel {
     private List<StatusMessage> messages;
     private StatusMessage current;
     private IconCache cache;
+    private Image backimg;
     
     public StatusHeader(String headline, String subtitle, int minimumWidth) {
         this(headline, subtitle, null, minimumWidth);
@@ -67,17 +74,29 @@ public class StatusHeader extends JPanel {
         String path = getClass().getPackage().getName().replace('.', '/');
         cache = new IconCache("/" + path + "/", icons);
         
+        backimg = loadImage("background.png");
+        
         makeLayout(headline, icon, minimumWidth);
+    }
+    
+    private static Image loadImage(String path) {
+        try (InputStream in = StatusHeader.class.getResourceAsStream(path)) {
+            if (in != null)
+                return ImageIO.read(in);
+        }
+        catch (IOException e) {
+            // ...
+        }
+        return null;
     }
     
     private void makeLayout(String headline, Icon userIcon, int minimumWidth) {
         setBackground(Color.WHITE);
-//        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setLayout(new GridBagLayout());
         
         JLabel header = new JLabel(headline);
         Font f = header.getFont();
-        header.setFont(f.deriveFont(Font.BOLD, f.getSize() + 4.0F));
+        header.setFont(f.deriveFont(Font.BOLD, f.getSize() + 3.0F));
         
         Icon empty;
         try {
@@ -89,6 +108,7 @@ public class StatusHeader extends JPanel {
         
         statusLabel = new JLabel(subtitle);
         statusLabel.setIcon(empty);
+        statusLabel.setIconTextGap(7);
         
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
@@ -97,6 +117,7 @@ public class StatusHeader extends JPanel {
         c.insets = new Insets(10, 10, 0, 0);
         add(header, c);
         
+        c.weighty = 1;
         c.anchor = GridBagConstraints.LAST_LINE_START;
         c.insets = new Insets(10, 10, 10, 0);
         add(statusLabel, c);
@@ -106,11 +127,30 @@ public class StatusHeader extends JPanel {
             c.weightx = c.weighty = 0;
             c.gridheight = 2;
             c.anchor = GridBagConstraints.EAST;
-            c.insets = new Insets(0, 0, 0, 0);
+            c.insets = new Insets(0, 0, 0, 20);
             add(new JLabel(userIcon), c);
         }
         
-        setPreferredSize(new Dimension(minimumWidth, getPreferredSize().height));
+        int minimumHeight = getPreferredSize().height;
+        if (backimg != null && backimg.getHeight(null) > minimumHeight)
+            minimumHeight = backimg.getHeight(null);
+        setPreferredSize(new Dimension(minimumWidth, minimumHeight));
+    }
+    
+    @Override
+    public void paintComponent(Graphics graphics) {
+        int w = getWidth();
+        int h = getHeight();
+        
+        Graphics2D g = (Graphics2D) graphics;
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, w, h);
+        
+        if (backimg != null) {
+            int imgWidth = backimg.getWidth(null);
+            int imgHeight = backimg.getHeight(null);
+            g.drawImage(backimg, w - imgWidth, h - imgHeight, null);
+        }
     }
     
     public void addMessage(int id, Severity severity, String text) {

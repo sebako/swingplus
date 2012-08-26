@@ -16,6 +16,7 @@
 
 package de.bastisoft.util.swing.dialog;
 
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -25,7 +26,6 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -36,8 +36,8 @@ class OkCancelDialogDemo extends OkCancelDialog {
     private JRadioButton allowRadio;
     private JRadioButton forbidRadio;
     
-    public OkCancelDialogDemo() {
-        super(null, "OkCancelDialog Demo", true);
+    public OkCancelDialogDemo(Frame parent) {
+        super(parent, "OkCancelDialog Demo", false);
         setContent(makeWidgets());
         makeActions();
     }
@@ -88,10 +88,4 @@ class OkCancelDialogDemo extends OkCancelDialog {
         return allowRadio.isSelected();
     }
     
-    public static void main(String[] args) {
-        boolean ok = new OkCancelDialogDemo().run();
-        JOptionPane.showMessageDialog(null, "Ok pressed: " + ok);
-        System.exit(0);
-    }
-
 }
