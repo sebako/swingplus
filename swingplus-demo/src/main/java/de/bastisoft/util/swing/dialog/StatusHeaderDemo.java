@@ -97,7 +97,7 @@ public class StatusHeaderDemo extends CloseDialog {
         panel.add(new JSeparator(), c);
         
         c.weighty = 1;
-        c.insets = new Insets(20, 20, 20, 20);
+        c.insets = new Insets(10, 10, 10, 10);
         panel.add(makeMainPanel(), c);
         
         c.weighty = 0;
