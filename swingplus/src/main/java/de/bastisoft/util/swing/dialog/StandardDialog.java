@@ -32,6 +32,17 @@ import javax.swing.JPanel;
 
 import de.bastisoft.util.swing.SwingUtils;
 
+/**
+ * A JDialog subclass that has an arbitraty number of buttons in the lower
+ * right corner of the frame. The buttons are automatically resized to have
+ * equal width. The button panel has a distance of 10 pixels from the frame
+ * border, and also from the main content of the dialog.
+ * 
+ * <p>Use {@link #setButtons} to set the buttons and {@link #setContent} to
+ * set the rest of the frame's content.
+ * 
+ * @author Sebastian Koppehel
+ */
 public abstract class StandardDialog extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -60,7 +71,16 @@ public abstract class StandardDialog extends JDialog {
         setLocationRelativeTo(owner);
     }
     
-    protected void setButtons(JButton[] buttons) {
+    /**
+     * Set the dialog's buttons. The buttons are laid out left-to-right, that is, the first element
+     * in the array will be the left-most button. The buttons will be resized to be of equal width.
+     * 
+     * <p>This method should be called before the dialog is shown, but it may be called later as well.
+     * It may also be called more than once in order to replace the existing buttons.
+     * 
+     * @param buttons buttons to be placed in the dialog
+     */
+    public void setButtons(JButton[] buttons) {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
@@ -88,7 +108,17 @@ public abstract class StandardDialog extends JDialog {
         setLocationRelativeTo(getOwner());
     }
     
-    protected void setContent(JComponent content) {
+    /**
+     * Sets the main content of the dialog, which will be placed above the buttons. Other than
+     * having a distance of 10 pixels to the buttons, no margin is applied. The component will
+     * directly touch the top, left, and right frame borders.
+     * 
+     * <p>This method should be called before the dialog is shown, but it may be called later as well.
+     * It may also be called more than once in order to replace the existing content.
+     * 
+     * @param content the main content of the dialog
+     */
+    public void setContent(JComponent content) {
         Container contentPane = getContentPane();
         contentPane.remove(this.content);
         
