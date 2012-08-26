@@ -183,7 +183,7 @@ public class DialogDemo extends JFrame {
     
     private JButton linkButton(String label) {
         JButton b = new JButton("<html><u>" + label);
-        b.setForeground(Color.RED);
+        b.setForeground(new Color(0x40, 0x60, 0xC0));
         b.setContentAreaFilled(false);
         b.setBorderPainted(false);
         b.setMargin(new Insets(0, 0, 0, 0));
