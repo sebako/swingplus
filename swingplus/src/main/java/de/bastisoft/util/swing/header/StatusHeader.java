@@ -118,6 +118,7 @@ public class StatusHeader extends JPanel {
         add(header, c);
         
         c.weighty = 1;
+        c.anchor = GridBagConstraints.LAST_LINE_START;
         c.insets = new Insets(10, 10, 10, 0);
         add(statusLabel, c);
         
