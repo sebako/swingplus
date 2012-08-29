@@ -96,7 +96,7 @@ public class StatusHeader extends JPanel {
         
         JLabel header = new JLabel(headline);
         Font f = header.getFont();
-        header.setFont(f.deriveFont(Font.BOLD, f.getSize() + 3.0F));
+        header.setFont(f.deriveFont(Font.BOLD, f.getSize() + 1.0F));
         
         Icon empty;
         try {
@@ -118,7 +118,6 @@ public class StatusHeader extends JPanel {
         add(header, c);
         
         c.weighty = 1;
-        c.anchor = GridBagConstraints.LAST_LINE_START;
         c.insets = new Insets(10, 10, 10, 0);
         add(statusLabel, c);
         
