@@ -16,6 +16,7 @@
 
 package de.bastisoft.util.swing;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
 
@@ -38,6 +39,12 @@ public class SwingUtils {
             if (label.mnemonicIndex != null)
                 l.setDisplayedMnemonicIndex(label.mnemonicIndex);
         }
+        return l;
+    }
+    
+    public static JLabel makeLabel(LabelText label, Component labelFor) {
+        JLabel l = makeLabel(label);
+        l.setLabelFor(labelFor);
         return l;
     }
     
